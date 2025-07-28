@@ -2,147 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lot Size Calculator</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #121212;
-      color: #f1f1f1;
-    }
-
-    .container {
-      max-width: 450px;
-      margin: auto;
-      background: #1e1e1e;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #00ffc8;
-    }
-
-    label {
-      font-size: 14px;
-      display: block;
-      margin-top: 10px;
-      margin-bottom: 4px;
-    }
-
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-
-    input, select {
-      background: #2e2e2e;
-      color: #ffffff;
-    }
-
-    button {
-      background: #00ffc8;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-
-    button:hover {
-      background: #00d1a3;
-    }
-
-    #result {
-      margin-top: 20px;
-      font-size: 18px;
-      text-align: center;
-      color: #00ffc8;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Floating Lot Size Calculator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h2>Lot Size Calculator</h2>
+  
+  <!-- Floating Toggle Button -->
+  <div id="floatCalcBtn" onclick="toggleCalculator()">💹 Lot Calc</div>
 
-    <label for="instrument">Trading Pair / Instrument:</label>
-    <select id="instrument" onchange="saveInputs()">
-      <option value="eurusd">EURUSD</option>
-      <option value="nas100">NAS100</option>
-      <option value="xauusd">XAUUSD (Gold)</option>
-      <option value="us30">US30</option>
-      <option value="gbpusd">GBPUSD</option>
-    </select>
+  <!-- Floating Calculator -->
+  <div id="lotCalcWidget">
+    <h3>Lot Size Calculator</h3>
 
-    <label for="accountSize">Account Size ($):</label>
-    <input type="number" id="accountSize" placeholder="e.g. 1000" oninput="saveInputs()" />
+    <label>
+      Account Size ($):
+      <input type="number" id="accountSize" />
+    </label>
 
-    <label for="riskPercent">Risk % per Trade:</label>
-    <input type="number" id="riskPercent" placeholder="e.g. 1" oninput="saveInputs()" />
+    <label>
+      Risk %:
+      <input type="number" id="riskPercent" />
+    </label>
 
-    <label for="stopLoss">Stop Loss (pips or points):</label>
-    <input type="number" id="stopLoss" placeholder="e.g. 50" oninput="saveInputs()" />
+    <label>
+      Stop Loss (pips):
+      <input type="number" id="slPips" />
+    </label>
 
-    <button onclick="calculateLotSize()">Calculate Lot Size</button>
+    <button onclick="calculateLot()">Calculate</button>
 
-    <div id="result"></div>
+    <p id="result"></p>
   </div>
 
-  <script>
-    const pipValues = {
-      eurusd: 10,
-      nas100: 1,
-      xauusd: 1,
-      us30: 1,
-      gbpusd: 10,
-    };
-
-    function getSelectedPipValue() {
-      const instrument = document.getElementById("instrument").value;
-      return pipValues[instrument] || 1; // Default to 1 if not found
-    }
-
-    function calculateLotSize() {
-      const accountSize = parseFloat(document.getElementById("accountSize").value);
-      const riskPercent = parseFloat(document.getElementById("riskPercent").value);
-      const stopLoss = parseFloat(document.getElementById("stopLoss").value);
-      const pipValue = getSelectedPipValue();
-
-      if (isNaN(accountSize) || isNaN(riskPercent) || isNaN(stopLoss)) {
-        document.getElementById("result").textContent = "❌ Please fill in all fields correctly.";
-        return;
-      }
-
-      const riskAmount = (accountSize * riskPercent) / 100;
-      const lotSize = riskAmount / (stopLoss * pipValue);
-
-      document.getElementById("result").textContent =
-        `✅ Recommended Lot Size: ${lotSize.toFixed(2)} lots (Pip Value: $${pipValue})`;
-    }
-
-    function saveInputs() {
-      localStorage.setItem("accountSize", document.getElementById("accountSize").value);
-      localStorage.setItem("riskPercent", document.getElementById("riskPercent").value);
-      localStorage.setItem("stopLoss", document.getElementById("stopLoss").value);
-      localStorage.setItem("instrument", document.getElementById("instrument").value);
-    }
-
-    function loadInputs() {
-      document.getElementById("accountSize").value = localStorage.getItem("accountSize") || "";
-      document.getElementById("riskPercent").value = localStorage.getItem("riskPercent") || "";
-      document.getElementById("stopLoss").value = localStorage.getItem("stopLoss") || "";
-      document.getElementById("instrument").value = localStorage.getItem("instrument") || "eurusd";
-    }
-
-    window.onload = loadInputs;
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
