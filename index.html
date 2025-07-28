@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lot Size Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f2f5;
+    }
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Lot Size Calculator</h2>
+    <input type="number" id="accountSize" placeholder="Account Size ($)" />
+    <input type="number" id="riskPercent" placeholder="Risk % (e.g. 1 for 1%)" />
+    <input type="number" id="stopLoss" placeholder="Stop Loss (pips/points)" />
+    <input type="number" id="pipValue" placeholder="Pip Value ($)" />
+    <button onclick="calculateLotSize()">Calculate</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateLotSize() {
+      const accountSize = parseFloat(document.getElementById("accountSize").value);
+      const riskPercent = parseFloat(document.getElementById("riskPercent").value);
+      const stopLoss = parseFloat(document.getElementById("stopLoss").value);
+      const pipValue = parseFloat(document.getElementById("pipValue").value);
+
+      if (isNaN(accountSize) || isNaN(riskPercent) || isNaN(stopLoss) || isNaN(pipValue)) {
+        document.getElementById("result").textContent = "Please fill in all fields correctly.";
+        return;
+      }
+
+      const riskAmount = (accountSize * riskPercent) / 100;
+      const lotSize = riskAmount / (stopLoss * pipValue);
+
+      document.getElementById("result").textContent = `Recommended Lot Size: ${lotSize.toFixed(2)} lots`;
+    }
+  </script>
+</body>
+</html>
